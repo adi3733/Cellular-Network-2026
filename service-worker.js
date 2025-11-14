@@ -8,6 +8,7 @@
 
 const CACHE_NAME = "cn-vault-v10";
 
+
 const CACHE_ASSETS = [
 
   "/", "/index.html", "/style-v2.css", "/script.js", "/manifest.json",
