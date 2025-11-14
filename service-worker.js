@@ -1,17 +1,26 @@
-/* service-worker.js
-   Fixed: URL-encoded asset paths for Vercel
-   Cache name must match script.js (cn-vault-v10)
-*/
+/* -------------------------------------------------------------
+   Cellular Network Code Vault — FINAL SERVICE WORKER (v10)
+   ✔ Correct URL-encoded folder paths
+   ✔ Offline caching
+   ✔ Progress bar events
+   ✔ DOCX cached notifications
+-------------------------------------------------------------- */
 
 const CACHE_NAME = "cn-vault-v10";
 
 const CACHE_ASSETS = [
+
   "/", "/index.html", "/style-v2.css", "/script.js", "/manifest.json",
 
+  // Icons
   "/assets/favicon.png",
   "/assets/micro_logo.png",
   "/assets/HD%20Logo%20PNG.png",
   "/assets/Caution.png",
+
+  /* -------------------------------------------------------------
+     PRACTICAL FILES (URL-encoded paths)
+  -------------------------------------------------------------- */
 
   // Expt 1
   "/assets/Expt%20No.1%20-%20Hata%20Model%20for%20large%20city/CN_1_Code.txt",
@@ -51,47 +60,93 @@ const CACHE_ASSETS = [
   "/assets/Expt%20No.15%20-%20Cellular%20System/CN_15.docx"
 ];
 
+
+/* -------------------------------------------------------------
+   INSTALL — CACHE EVERYTHING + SEND PROGRESS EVENTS
+-------------------------------------------------------------- */
 self.addEventListener("install", (event) => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    const total = CACHE_ASSETS.length;
-    let done = 0;
-    for (const asset of CACHE_ASSETS) {
-      try {
-        await cache.add(asset);
-        done++;
-        const progress = Math.floor((done / total) * 100);
-        notifyClients({ type: "CACHE_PROGRESS", progress });
-        if (asset.endsWith(".docx")) {
-          notifyClients({ type: "DOCX_CACHED", file: asset.split("/").pop() });
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const total = CACHE_ASSETS.length;
+      let done = 0;
+
+      for (const asset of CACHE_ASSETS) {
+        try {
+          await cache.add(asset);
+          done++;
+
+          // Send progress %
+          const progress = Math.floor((done / total) * 100);
+          notifyClients({ type: "CACHE_PROGRESS", progress });
+
+          // Notify when each DOCX file is cached
+          if (asset.endsWith(".docx")) {
+            notifyClients({
+              type: "DOCX_CACHED",
+              file: asset.split("/").pop()
+            });
+          }
+
+        } catch (err) {
+          console.warn("❌ Failed to cache:", asset, err);
         }
-      } catch (err) {
-        console.warn("Cache failed for:", asset, err);
       }
-    }
-  })());
+
+    })()
+  );
+
   self.skipWaiting();
 });
 
+
+/* -------------------------------------------------------------
+   ACTIVATE — CLEAN OLD CACHES
+-------------------------------------------------------------- */
 self.addEventListener("activate", (event) => {
-  event.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.map(k => k !== CACHE_NAME && caches.delete(k)))
-  ));
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      )
+    )
+  );
+
   self.clients.claim();
 });
 
+
+/* -------------------------------------------------------------
+   FETCH — SERVE CACHE FIRST THEN NETWORK
+-------------------------------------------------------------- */
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request).then(resp => {
-        const clone = resp.clone();
-        caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
-        return resp;
-      }).catch(() => caches.match("/index.html"));
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+
+      return fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+          return response;
+        })
+        .catch(() => caches.match("/index.html"));
     })
   );
 });
 
-function notifyClients(msg) {
-  self.clients.matchAll().then(clients => clients.forEach(c => c.postMessage(msg)));
+
+/* -------------------------------------------------------------
+   SEND PROGRESS / DOCX MESSAGES TO CLIENTS
+-------------------------------------------------------------- */
+function notifyClients(message) {
+  self.clients.matchAll().then((clients) => {
+    clients.forEach((client) => client.postMessage(message));
+  });
 }
