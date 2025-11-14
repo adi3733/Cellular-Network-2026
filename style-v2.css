@@ -1,0 +1,509 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+
+:root {
+  /* 🌈 Main Colors */
+  --bg-gradient: linear-gradient(135deg, #1f1f1f, #2e0249, #570a57);
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --accent: linear-gradient(135deg, #f89820, #ff0077);
+  --text-light: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --popup-bg: rgba(35, 35, 35, 0.92);
+}
+
+/* 🧱 Base Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  overflow-x: hidden;
+}
+
+/* 🌟 Header */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeIn 1.2s ease;
+}
+
+.logo-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 85px;        /* increased from 60px */
+  height: 85px;       /* increased from 60px */
+  object-fit: contain;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 150, 0, 0.7));
+}
+
+header h1 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+header p {
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-top: 8px;
+  font-size: 1rem;
+}
+
+/* 🧩 Practical Grid Layout */
+.grid {
+  display: grid;
+  gap: 25px;
+  width: 100%;
+  max-width: 1000px;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* 💻 Desktop */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 📱 Tablet */
+@media (max-width: 1023px) and (min-width: 601px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 📱 Mobile (Single column - 12 rows layout) */
+@media (max-width: 600px) {
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr; /* only 1 column */
+    grid-auto-rows: minmax(100px, auto);
+    gap: 14px;
+    padding: 15px 10px;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .card {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 15px 10px;
+    border-radius: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 110px;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  .card span {
+    font-size: 0.8rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  header p {
+    font-size: 0.8rem;
+  }
+}
+
+
+
+
+
+/* 🪄 Card Design (Glass Effect) */
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 0 25px rgba(255,255,255,0.06);
+  backdrop-filter: blur(15px);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 25px rgba(255, 153, 51, 0.3);
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card span {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* 🪄 Popup Modal (Glass Effect) */
+.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease;
+}
+
+.popup-card {
+  background: var(--popup-bg);
+  border-radius: 18px;
+  padding: 25px;
+  width: 85%;
+  max-width: 750px;
+  box-shadow: 0 0 30px rgba(248, 152, 32, 0.15);
+  backdrop-filter: blur(12px);
+  animation: slideUp 0.5s ease;
+}
+
+/* Popup Header */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.popup-header h2 {
+  font-size: 1.3rem;
+  background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  color: #ff7b00;
+  transform: scale(1.15);
+}
+
+/* 📂 File Tabs */
+.file-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.file-tab {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+}
+
+.file-tab:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.file-tab.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(248, 152, 32, 0.3);
+}
+
+/* 🧾 Code Box */
+#popupCode {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+}
+
+/* Buttons */
+.copy-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  float: right;
+  box-shadow: 0 4px 15px rgba(248,152,32,0.3);
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  transform: scale(1.08);
+  filter: brightness(1.15);
+  box-shadow: 0 4px 20px rgba(255, 150, 50, 0.5);
+}
+
+.popup-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.font-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.font-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* ⚠️ Disclaimer */
+.disclaimer {
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px 25px;
+  margin-top: 50px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.caution-icon {
+  width: 35px;
+  height: 35px;
+  filter: drop-shadow(0 0 5px rgba(255, 200, 0, 0.6));
+}
+
+/* 🌈 Footer */
+footer {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 50px;
+  color: var(--text-muted);
+}
+
+.footer-link {
+  background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  opacity: 0.8;
+  filter: drop-shadow(0 0 6px rgba(255, 150, 50, 0.6));
+}
+
+/* 🌟 Splash Screen */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #0a0a0a, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 99999;
+  animation: fadeIn 1.5s ease forwards;
+}
+
+.splash-content {
+  text-align: center;
+}
+
+.splash-logo {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(248,152,32,0.5));
+  opacity: 0;
+  animation: fadeInLogo 1.5s ease forwards;
+}
+
+.splash-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: fadeInText 1.5s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.splash-caption {
+  color: #ccc;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  letter-spacing: 1px;
+  opacity: 0;
+  animation: fadeInText 1.5s ease forwards;
+  animation-delay: 0.6s;
+}
+
+#splash-screen.hide {
+  animation: fadeOut 0.8s ease forwards;
+}
+
+/* ✨ Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInLogo { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes fadeInText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: scale(1.05); } }
+
+
+/* ✍️ Disclaimer Font (Poppins only) */
+.disclaimer {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  line-height: 1.6;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.disclaimer-title h3 {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600;
+  background: linear-gradient(90deg, #f89820, #ff0077);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* 🌈 Layout Toggle (Mobile Only) */
+.layout-toggle {
+  display: none; /* hidden by default */
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#toggleLayout {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 140, 40, 0.4);
+  transition: all 0.3s ease;
+}
+
+#toggleLayout:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.layout-note {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+/* Show toggle only on mobile */
+@media (max-width: 600px) {
+  .layout-toggle {
+    display: block;
+  }
+}
+
+
+.grid {
+  transition: grid-template-columns 0.3s ease;
+}

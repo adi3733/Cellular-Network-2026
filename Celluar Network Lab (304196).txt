@@ -1,0 +1,10 @@
+Celluar Network Lab (304196)
+Expt No.1 :- Hata Model for large city
+Expt No.3 :- BER performance over a wire line AWGN channel
+Expt No.5 :- Power vs RMS Delay spread
+Expt No.6 :-Link-Budget analysis
+Expt No.7 :- BER MIMO
+Expt No.9 :- MIMO Channel Coefficient
+Expt No.10 :- Doppler Shift
+Expt No.13 :- OFDM – BER Vs Eb/N0
+Expt No.15 :- Cellular System

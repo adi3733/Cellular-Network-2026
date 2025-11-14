@@ -1,0 +1,21 @@
+clc;
+clear all;
+
+A = 38.4;
+ch = input('Enter number of channels = ');
+pb = input('Enter the blocking probability = ');
+city_area = input('Enter city area in km² = ');
+radius = input('Enter the multiple values of radius (in km) = ');
+
+% Supported traffic for 48 channels and pb = 0.02 from Erlang Traffic table
+cell_users = A / pb;
+cell_area = radius .* (6 * (1 / sqrt(3)));
+cell_numbers = fix(city_area ./ cell_area);
+supported_users = cell_numbers * cell_users;
+
+% Plotting the results
+plot(radius, supported_users, 'r-o');
+title('Number of Users with 2% Blocking Probability');
+xlabel('Radius in km');
+ylabel('Supported Users');
+grid on;

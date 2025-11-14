@@ -1,0 +1,23 @@
+% Define the Power Delay Profile (PDP) function
+fun = @(tau) 2 * exp(-tau / 1e-6);
+
+% Call the function with integration limits
+[meanDelay, rmsDelay, symbolRate, coherenceBW] = meas_continuous_PDP(fun, 0, 10e-6);
+
+% Display results
+fprintf('Mean Delay: %e seconds\n', meanDelay);
+fprintf('RMS Delay: %e seconds\n', rmsDelay);
+fprintf('Symbol Rate: %e Hz\n', symbolRate);
+fprintf('Coherence Bandwidth: %e Hz\n', coherenceBW);
+
+% Generate PDP curve
+tau = 0:0.01e-6:5e-6;
+fun1 = 2 * exp(-tau / 1e-6);
+
+% Plot PDP
+figure;
+plot(tau, fun1, 'r', 'LineWidth', 2);
+title('Power vs Delay', 'FontSize', 20);
+xlabel('Delay (s)', 'FontSize', 16);
+ylabel('Power (dBm)', 'FontSize', 16);
+grid on;

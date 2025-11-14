@@ -1,0 +1,22 @@
+clc;  
+close all;  
+clear all;  
+pt=input('enter the input power in watts:');  
+Pt=10*log10(pt) %calculating transmitted power in db  
+gt=input('enter the transmitting antenna gain in db:');  
+gs=input('enter the receiving antenna gain in db:');  
+EIRP=Pt+gt      
+%calculating EIRP  
+d=input('enter the distance in km:');  
+f=input('enter the frequency in mhz:');  
+fsl=32.4+20*log10(d)+20*log10(f) %calculating path loss  
+rfl=input('enter the receiver feeder loss in db:');  
+aa=input('enter the atmospheric absorption in db:');  
+aml=input('enter the antenna misalignment loss in db:');  
+pl=input('enter the polarization loss in db:');  
+losses=fsl+rfl+aa+aml+pl;  %calculating total losses  
+disp(sprintf('%s %f %s','total loss',losses,'db'));  
+P=EIRP+gs-losses;          
+%calculating power recieved  
+P_watt = 10^(P/10); 
+disp(sprintf('%s %f %s','Total received power =',P_watt,'W'));

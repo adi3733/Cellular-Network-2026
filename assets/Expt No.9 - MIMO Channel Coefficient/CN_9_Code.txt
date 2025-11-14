@@ -1,0 +1,16 @@
+Nt = 2; % Number of transmit antennas  
+Nr = 2; % Number of receive antennas  
+No = 1; % Noise variance  
+
+y = input('Enter received signal coefficients at the detector = ');  
+
+s = 2 * randi([0 1], Nt, 1) - 1; % Binary transmitted symbols  
+
+% Generate AWGN noise  
+noise = sqrt(No/2) * (randn(Nr, 1) + 1i * randn(Nr,1));  
+
+% Estimate the channel matrix H  
+H = (y - noise) / s;  
+
+disp('The channel coefficients are:');  
+disp(H);  

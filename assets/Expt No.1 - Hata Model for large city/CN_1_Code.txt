@@ -1,0 +1,30 @@
+clc; 
+clear all; 
+%----------Input Section--------------- 
+Hbts = 40; %Height measured from the base of the BTS tower to the radiation centerline 
+Tbts = 350; %Terrain elevation at the location of the BTS 
+Htav = 300; %Height of the average terrain (from 3 Km to 15 km distance from the BTS) 
+Hm = 2; %Height of the mobile antenna in meters 
+f = 2100; %100:100:3000; %Range of frequencies in MHz 
+d = 0.5:0.5:15; %Range of Tx-Rx separation distances in Kilometers 
+Pt = 0.020; %Power transmitted by the BTS antenna in Watts 
+Gt = 10; %BTS antenna gain in dBi 
+%-------------------------------------- 
+Hb = Hbts + Tbts - Htav; %Effective Height of the BTS antenna in meters 
+C = 0; 
+aHm = 3.2 * (log10(11.75 * Hm)) ^ 2 - 4.97; 
+A = 69.55 + 26.16 * log10(f) - 13.82 * log10(Hb) - aHm; 
+B = 44.9 - 6.55 * log10(Hb); 
+PL = A + B * log10(d) + C; 
+subplot(2, 1, 1) 
+plot(d, PL, 'r', 'LineWidth', 2); 
+title('Hata-Okumura Path Loss Model', 'Fontsize',20); 
+xlabel('Distance - Kilometers', 'Fontsize',16); 
+ylabel('Path Loss (dB)', 'Fontsize',16); 
+%Compute Received Signal Level 
+Pr = 10 * log10(Pt * 1000) + Gt - PL 
+subplot(2, 1, 2) 
+plot(d, Pr, 'r', 'LineWidth', 2); 
+title('Hata-Okumura Model', 'Fontsize',20); 
+xlabel('Distance - Kilometers', 'Fontsize',16); 
+ylabel('Received Signal Level (dBm)', 'Fontsize',16); 

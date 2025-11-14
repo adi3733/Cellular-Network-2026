@@ -1,0 +1,66 @@
+/* 
+  Prevent caching of main HTML
+*/
+ /index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+
+/*
+  Prevent caching of editable text/code/docx files
+*/
+ /assets/*.txt
+  Cache-Control: no-cache, no-store, must-revalidate
+
+ /assets/*.docx
+  Cache-Control: no-cache, no-store, must-revalidate
+
+
+/*
+  Cache static files aggressively (1 year)
+*/
+ /assets/*.(png|jpg|jpeg|svg|webp|ico|json|js|css|ttf|woff|woff2)
+  Cache-Control: public, max-age=31536000, immutable
+
+
+/*
+  Security headers (recommended)
+*/
+ /*
+  Apply to entire site
+ */
+ /*
+  Security headers 
+ */
+ /*
+  Apply to all routes
+ */
+ /*
+  Apply globally
+ */
+ /*
+  Security best practices
+ */
+ /*
+  Entire site
+ */
+ /*
+  Files under root & subfolders
+ */
+ /*
+  Global security rules
+ */
+ /*
+  Entire domain
+ */
+ /* ANY PATH */
+ /*
+  All paths
+ */
+
+ /* wildcard for all routes */
+ / *
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload

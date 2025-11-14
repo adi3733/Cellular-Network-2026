@@ -1,0 +1,32 @@
+clc;
+clear all;
+
+% User Inputs
+speed = input('Enter the moving vehicle speed in miles per hour: ');
+theta = input('Enter the angle of vehicle with the line joining the base station: ');
+carrier = input('Frequency over which Doppler shift is to be observed (in Hz): ');
+
+% Display movement scenarios
+fprintf('1. Mobile user is moving towards the base station \n');
+fprintf('2. Mobile user is moving away from the base station\n');
+movement = input('Enter appropriate scenario: ');
+
+% Convert speed from mph to m/s
+speed_m = speed * 1.61 * 5 / 18;
+disp(['Speed in m/s: ', num2str(speed_m)]);
+
+% Calculate Doppler Shift
+fd = speed_m * cosd(theta) * carrier / (3 * 10^8);
+fprintf('The Doppler shift is fd = %.2f Hz.\n', fd);
+
+% Determine perceived frequency
+switch movement
+    case 1
+        fprintf('Since the mobile user is moving towards the base station, ');
+        fprintf('the perceived frequency fr = %.2f Hz + %.2f Hz = %.2f Hz\n', carrier, fd, carrier + fd);
+    case 2
+        fprintf('Since the mobile user is moving away from the base station, ');
+        fprintf('the perceived frequency fr = %.2f Hz - %.2f Hz = %.2f Hz\n', carrier, fd, carrier - fd);
+    otherwise
+        fprintf('Invalid selection. Please enter 1 or 2.\n');
+end
