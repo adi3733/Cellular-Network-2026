@@ -507,3 +507,113 @@ footer {
 .grid {
   transition: grid-template-columns 0.3s ease;
 }
+
+
+/* -------------------------------------------------------------
+   🟦 OFFLINE BANNER + OFFLINE READY BADGE + PROGRESS BAR
+   Fully matched with your existing UI theme
+-------------------------------------------------------------- */
+
+/* 🔥 Offline Banner (Top Red Warning) */
+#offlineBanner {
+  width: 100%;
+  background: rgba(255, 60, 60, 0.95);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  letter-spacing: 0.5px;
+  font-family: "Poppins", sans-serif !important;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.35);
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* 🟩 Offline Ready Badge (Bottom Right) */
+#offlineReadyBadge {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  background: linear-gradient(135deg, #00ff95, #00c853);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: none;
+  z-index: 99999;
+  box-shadow: 0 4px 15px rgba(0, 255, 160, 0.35);
+  font-family: "Poppins", sans-serif !important;
+  animation: slideUp 0.35s ease;
+}
+
+/* Animations for badge */
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0px); opacity: 1; }
+}
+
+/* -------------------------------------------------------------
+   🔄 OFFLINE CACHE PROGRESS BAR (Centered Under Header)
+-------------------------------------------------------------- */
+
+#cacheBarContainer {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  display: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.35);
+  animation: fadeIn 0.5s ease;
+}
+
+#cacheBar {
+  height: 12px;
+  width: 0%;
+  background: linear-gradient(135deg, #00ff9d, #0099ff);
+  transition: width 0.25s ease-out;
+  border-radius: 10px;
+}
+
+#cacheBarText {
+  text-align: center;
+  font-size: 0.9rem;
+  margin: 8px 0;
+  color: #00ffb5;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif !important;
+  letter-spacing: 0.5px;
+  display: none;
+}
+
+/* -------------------------------------------------------------
+   TOAST NOTIFICATION (Middle Bottom)
+-------------------------------------------------------------- */
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg,#00ff9d,#0099ff);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 12px;
+  z-index: 99999;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  opacity: 0;
+  animation: toastPop 0.35s ease forwards;
+}
+
+@keyframes toastPop {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0px); opacity: 1; }
+}

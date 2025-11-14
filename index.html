@@ -7,13 +7,12 @@
 
   <link rel="icon" type="image/png" href="/assets/favicon.png" />
   <link rel="stylesheet" href="/style-v2.css" />
-
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#00c4ff" />
 
   <script>
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js").catch(console.warn);
+      navigator.serviceWorker.register("/service-worker.js");
     }
   </script>
 </head>
@@ -23,10 +22,42 @@
   <!-- 🌟 Splash Screen -->
   <div id="splash-screen">
     <div class="splash-content">
-      <img src="/assets/HD Logo PNG.png" alt="Techh Buddies Logo" class="splash-logo" />
+      <img src="/assets/HD Logo PNG.png" class="splash-logo" />
       <h1 class="splash-title">Techh Buddies</h1>
-      <p class="splash-caption">Cellular Network Code Vault • Sem 6 TE ENTC (304196)</p>
+      <p class="splash-caption">Cellular Network Code Vault • Sem 6 ENTC</p>
     </div>
+  </div>
+
+  <!-- ⚠️ Offline Mode Banner -->
+  <div id="offlineBanner" style="
+    width:100%; 
+    background:#ff4444; 
+    color:white; 
+    padding:10px; 
+    text-align:center; 
+    font-weight:600;
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:9999;">
+    ⚠️ You are offline — some files may not load
+  </div>
+
+  <!-- ✔ Offline Ready Badge -->
+  <div id="offlineReadyBadge" style="
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#00c853;
+    color:white;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:600;
+    display:none;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+    z-index:9999;">
+    ✔ Offline Ready
   </div>
 
   <header>
@@ -34,7 +65,7 @@
       <img src="/assets/cn_logo.png" class="logo" />
       <h1>Cellular Network Code Vault</h1>
     </div>
-    <p>Your complete offline-ready Cellular Network Lab vault.</p>
+    <p>Your complete offline-ready CN Lab Vault.</p>
   </header>
 
   <!-- 🔄 Offline Caching Progress Bar -->
@@ -102,7 +133,7 @@
       <a href="https://www.techhbuddies.com" target="_blank" class="footer-link">
         TechhBuddies
       </a>
-      | Cellular Network Code Vault © 2025
+      | Microcontroller Code Vault © 2025
       <br />
       <small>Last updated: <span id="buildVersion"></span></small>
     </p>
@@ -112,9 +143,8 @@
 
   <script>
     window.addEventListener("load", () => {
-      const splash = document.getElementById("splash-screen");
-      setTimeout(() => splash.classList.add("hide"), 200);
-      setTimeout(() => splash.remove(), 1000);
+      setTimeout(() => document.getElementById("splash-screen").classList.add("hide"), 4200);
+      setTimeout(() => document.getElementById("splash-screen").remove(), 2000);
     });
   </script>
 
