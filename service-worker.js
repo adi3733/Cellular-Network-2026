@@ -1,12 +1,21 @@
 /* -------------------------------------------------------------
-   Cellular Network Code Vault — FINAL Offline SW
+   Cellular Network Code Vault — FINAL Offline Service Worker
+   With:
+   ✔ Caching Progress %
+   ✔ DOCX Cached Notifications
+   ✔ Automatic Offline Update
 -------------------------------------------------------------- */
 
-const CACHE_NAME = "cn-vault-v3"; // changed v3 to force update
+// Change version to force browser update
+const CACHE_NAME = "cn-vault-v5";
 
+/* -------------------------------------------------------------
+   ALL FILES TO CACHE (MUST MATCH EXACT FOLDER NAMES)
+-------------------------------------------------------------- */
 const CACHE_ASSETS = [
   "/", "/index.html", "/style-v2.css", "/script.js", "/manifest.json",
 
+  // Static Icons
   "/assets/favicon.png",
   "/assets/micro_logo.png",
   "/assets/HD Logo PNG.png",
@@ -55,45 +64,84 @@ const CACHE_ASSETS = [
 ];
 
 /* -------------------------------------------------------------
-   INSTALL EVENT
+   INSTALL EVENT → CACHE WITH PROGRESS UPDATES
 -------------------------------------------------------------- */
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(CACHE_ASSETS))
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+
+      const total = CACHE_ASSETS.length;
+      let done = 0;
+
+      for (const asset of CACHE_ASSETS) {
+        try {
+          await cache.add(asset);
+          done++;
+
+          // Send caching progress to the webpage
+          const percent = Math.floor((done / total) * 100);
+          notifyClients({ type: "CACHE_PROGRESS", progress: percent });
+
+          // Notify when a DOCX file is cached
+          if (asset.endsWith(".docx")) {
+            const filename = asset.split("/").pop();
+            notifyClients({
+              type: "DOCX_CACHED",
+              file: filename,
+            });
+          }
+
+        } catch (err) {
+          console.warn("Failed to cache:", asset);
+        }
+      }
+    })()
   );
+
   self.skipWaiting();
 });
 
 /* -------------------------------------------------------------
-   ACTIVATE EVENT
+   ACTIVATE EVENT → CLEAR OLD CACHES
 -------------------------------------------------------------- */
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", async (event) => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.map(key => key !== CACHE_NAME && caches.delete(key)))
+    caches.keys().then((keys) =>
+      Promise.all(keys.map((key) => key !== CACHE_NAME && caches.delete(key)))
     )
   );
   self.clients.claim();
 });
 
 /* -------------------------------------------------------------
-   FETCH EVENT
+   FETCH EVENT → OFFLINE FIRST
 -------------------------------------------------------------- */
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then(cacheRes => {
+    caches.match(event.request).then((cachedFile) => {
       return (
-        cacheRes ||
+        cachedFile ||
         fetch(event.request)
-          .then((fetchRes) => {
-            // Cache fetched response
-            const clone = fetchRes.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-            return fetchRes;
+          .then((response) => {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, clone);
+            });
+            return response;
           })
           .catch(() => caches.match("/index.html"))
       );
     })
   );
 });
+
+/* -------------------------------------------------------------
+   SEND MESSAGES TO ALL CLIENTS (PAGES)
+-------------------------------------------------------------- */
+function notifyClients(message) {
+  self.clients.matchAll().then((clients) => {
+    clients.forEach((client) => client.postMessage(message));
+  });
+}
 

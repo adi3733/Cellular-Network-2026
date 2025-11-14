@@ -5,96 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cellular Network Code Vault</title>
 
-  <!-- 🌐 Favicon (place your favicon in /assets/) -->
   <link rel="icon" type="image/png" href="/assets/favicon.png" />
-  <link rel="apple-touch-icon" href="/assets/favicon.png" />
-
-  <!-- ✅ CSS -->
   <link rel="stylesheet" href="/style-v2.css" />
 
-  <!-- 📱 PWA Support -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#00c4ff" />
 
   <script>
-    // Register service worker and notify when update is available
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js").then(reg => {
-        reg.addEventListener("updatefound", () => {
-          const newWorker = reg.installing;
-          newWorker.addEventListener("statechange", () => {
-            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-              showUpdatePopup();
-            }
-          });
-        });
-      }).catch(err => console.warn("SW registration failed:", err));
-    }
-
-    function showUpdatePopup() {
-      const popup = document.createElement("div");
-      popup.innerHTML = `
-        <div style="
-          position: fixed;
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: linear-gradient(135deg, #00c4ff, #0077ff);
-          color: #fff;
-          padding: 12px 20px;
-          border-radius: 10px;
-          font-weight: 500;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-          z-index: 9999;
-          cursor: pointer;
-        ">
-          ✨ New version available — Click to refresh
-        </div>
-      `;
-      document.body.appendChild(popup);
-      popup.addEventListener("click", () => {
-        navigator.serviceWorker.getRegistration().then(reg => {
-          if (reg && reg.waiting) {
-            reg.waiting.postMessage("SKIP_WAITING");
-            window.location.reload();
-          }
-        });
-      });
+      navigator.serviceWorker.register("/service-worker.js").catch(console.warn);
     }
   </script>
 </head>
 
 <body>
+
   <!-- 🌟 Splash Screen -->
   <div id="splash-screen">
     <div class="splash-content">
       <img src="/assets/HD Logo PNG.png" alt="Techh Buddies Logo" class="splash-logo" />
       <h1 class="splash-title">Techh Buddies</h1>
-      <p class="splash-caption">Your Friendly Techh Partner</p>
+      <p class="splash-caption">Cellular Network Code Vault • Sem 6 TE ENTC (304196)</p>
     </div>
   </div>
 
-
-  <!-- 🌟 Header -->
   <header>
     <div class="logo-title">
-      <img src="/assets/cn_logo.png" alt="Logo" class="logo" />
+      <img src="/assets/cn_logo.png" class="logo" />
       <h1>Cellular Network Code Vault</h1>
     </div>
-    <p>All your Cellular Network Lab practicals — neatly organized.</p>
+    <p>Your complete offline-ready Cellular Network Lab vault.</p>
   </header>
 
-  <div class="layout-toggle" id="layoutToggleContainer">
-    <button id="toggleLayout">🔳 Switch to 2x2 Layout</button>
-    <small class="layout-note">(Mobile Only)</small>
-  </div>
+  <!-- 🔄 Offline Caching Progress Bar -->
+  <div id="cacheBarContainer" style="
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto 20px auto;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      display: none;">
+    
+    <div id="cacheBar" style="
+        height: 10px;
+        width: 0%;
+        background: linear-gradient(135deg,#00ff9d,#0099ff);
+        transition: width 0.25s;">
+    </div>
 
-  <p id="cacheProgress"
-     style="display:none; text-align:center; margin-top:10px; color:#00ff9d; font-weight:500;">
-  </p>
+    <p id="cacheBarText" style="
+        text-align:center;
+        font-size:0.85rem;
+        margin-top:6px;
+        color:#00ff9d;
+        font-weight:500;
+        display:none;">
+        Preparing files for offline use…
+    </p>
+  </div>
 
   <main class="grid" id="practicalList"></main>
 
+  <!-- 🔍 Popup Viewer -->
   <div id="popup" class="popup">
     <div class="popup-card">
       <div class="popup-header">
@@ -105,11 +78,7 @@
       <div id="fileTabs" class="file-tabs"></div>
       <pre id="popupCode"></pre>
 
-      <div class="popup-controls">
-        <button id="fontMinus" class="font-btn">−</button>
-        <button id="fontPlus" class="font-btn">+</button>
-        <button id="copyBtn" class="copy-btn">📋 Copy Code</button>
-      </div>
+      <div class="popup-controls"></div>
     </div>
   </div>
 
@@ -121,7 +90,7 @@
     </div>
     <p>
       This website is created solely for <strong>educational purposes</strong>.
-      It is intended to help students understand and practice Cellular Network experiments.
+      It is intended to help students understand and practice Microcontroller programming and interfacing.
       Please do not use this platform or its content for any form of
       <strong>cheating, malpractice, or academic dishonesty</strong>.
     </p>
@@ -129,24 +98,25 @@
 
   <footer>
     <p>
-      Made with ❤️ by Adiii | Cellular Network Code Vault © 2025
+      Made with ❤️ by
+      <a href="https://www.techhbuddies.com" target="_blank" class="footer-link">
+        TechhBuddies
+      </a>
+      | Cellular Network Code Vault © 2025
       <br />
       <small>Last updated: <span id="buildVersion"></span></small>
     </p>
   </footer>
 
-  <!-- ⚙️ Scripts -->
   <script src="/script.js"></script>
 
   <script>
-    // Splash hide logic
     window.addEventListener("load", () => {
       const splash = document.getElementById("splash-screen");
-      setTimeout(() => {
-        splash.classList.add("hide");
-        setTimeout(() => splash.remove(), 800);
-      }, 2200);
+      setTimeout(() => splash.classList.add("hide"), 200);
+      setTimeout(() => splash.remove(), 1000);
     });
   </script>
+
 </body>
 </html>

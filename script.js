@@ -1,11 +1,7 @@
 /* -------------------------------------------------------------
-   Cellular Network Code Vault — Clean Final Version (No ZIP)
-   Developer: Adiii
+   Cellular Network Code Vault — Final script.js
 -------------------------------------------------------------- */
 
-/* -------------------------------------------------------------
-   PRACTICAL LIST (CN LAB 304196)
--------------------------------------------------------------- */
 const practicals = [
   {
     id: 1,
@@ -20,7 +16,7 @@ const practicals = [
   {
     id: 3,
     name: "Expt No.3 - BER performance over AWGN",
-    desc: "BER analysis over wire-line AWGN channel",
+    desc: "BER over a wire-line AWGN channel",
     files: [
       { name: "CN_3_Code.txt", path: "/assets/Expt No.3 - BER performance over a wire line AWGN channel/CN_3_Code.txt" }
     ],
@@ -41,7 +37,7 @@ const practicals = [
   {
     id: 6,
     name: "Expt No.6 - Link-Budget Analysis",
-    desc: "Path loss, margin & gain computations",
+    desc: "Path loss & margin calculations",
     files: [
       { name: "CN_6_Code.txt", path: "/assets/Expt No.6 - Link-Budget analysis/CN_6_Code.txt" }
     ],
@@ -51,7 +47,7 @@ const practicals = [
   {
     id: 7,
     name: "Expt No.7 - BER MIMO",
-    desc: "Bit error rate for MIMO systems",
+    desc: "Bit error rate for MIMO",
     files: [
       { name: "CN_7_Code.txt", path: "/assets/Expt No.7 - BER MIMO/CN_7_Code.txt" }
     ],
@@ -81,7 +77,7 @@ const practicals = [
   {
     id: 13,
     name: "Expt No.13 - OFDM: BER Vs Eb/N0",
-    desc: "OFDM performance with noise",
+    desc: "OFDM BER vs Eb/N0 performance",
     files: [
       { name: "CN_13_Code.txt", path: "/assets/Expt No.13 - OFDM - BER Vs Eb-N0/CN_13_Code.txt" }
     ],
@@ -91,13 +87,14 @@ const practicals = [
   {
     id: 15,
     name: "Expt No.15 - Cellular System",
-    desc: "Cell structure, reuse, capacity",
+    desc: "Cell planning, reuse & capacity",
     files: [
       { name: "CN_15_Code.txt", path: "/assets/Expt No.15 - Cellular System/CN_15_Code.txt" }
     ],
     output: "/assets/Expt No.15 - Cellular System/CN_15.docx"
   }
 ];
+
 
 /* -------------------------------------------------------------
    DOM REFERENCES
@@ -109,10 +106,13 @@ const popupCode = document.getElementById("popupCode");
 const fileTabs = document.getElementById("fileTabs");
 const closeBtn = document.getElementById("closeBtn");
 
-const cacheProgress = document.getElementById("cacheProgress");
+const cacheBar = document.getElementById("cacheBar");
+const cacheBarText = document.getElementById("cacheBarText");
+const cacheBarContainer = document.getElementById("cacheBarContainer");
 
 let currentCode = "";
 let currentFontSize = 0.95;
+
 
 /* -------------------------------------------------------------
    RENDER PRACTICAL CARDS
@@ -120,114 +120,71 @@ let currentFontSize = 0.95;
 practicals.forEach((p) => {
   const card = document.createElement("div");
   card.className = "card";
-
-  const count = p.files.length;
-
-  card.innerHTML = `
-    <h3>${p.name}</h3>
-    <span>${p.desc} — ${count} file${count > 1 ? "s" : ""}</span>
-  `;
-
+  card.innerHTML = `<h3>${p.name}</h3><span>${p.desc}</span>`;
   card.onclick = () => openPopup(p);
   list.appendChild(card);
 });
 
+
 /* -------------------------------------------------------------
-   POPUP VIEWER
+   POPUP LOGIC
 -------------------------------------------------------------- */
 function openPopup(p) {
   popup.style.display = "flex";
-
-  popupTitle.textContent = `${p.name}`;
+  popupTitle.textContent = p.name;
 
   fileTabs.innerHTML = "";
-  popupCode.textContent = "";
-  currentFontSize = 0.95;
-
-  p.files.forEach((file, index) => {
+  
+  p.files.forEach((file, idx) => {
     const tab = document.createElement("button");
     tab.className = "file-tab";
     tab.textContent = file.name;
-    tab.onclick = () => setActiveFile(p, index);
+    tab.onclick = () => setActiveFile(p, idx);
     fileTabs.appendChild(tab);
   });
 
   renderControls(p);
-
   setActiveFile(p, 0);
 }
 
 function setActiveFile(practical, index) {
-  const tabs = Array.from(fileTabs.children);
-  tabs.forEach((tab, i) => tab.classList.toggle("active", i === index));
+  [...fileTabs.children].forEach((tab, i) =>
+    tab.classList.toggle("active", i === index)
+  );
 
   const file = practical.files[index];
-
   fetch(file.path)
-    .then((res) => res.text())
+    .then((r) => r.text())
     .then((code) => {
       currentCode = code;
       popupCode.textContent = code;
-      popupCode.style.fontSize = `${currentFontSize}rem`;
-    })
-    .catch(() => {
-      popupCode.textContent = `⚠️ Cannot load ${file.name}`;
     });
 }
 
-function renderControls(practical) {
+function renderControls(p) {
   const controls = document.querySelector(".popup-controls");
   controls.innerHTML = "";
 
-  if (practical.output) {
-    const downloadBtn = document.createElement("button");
-    downloadBtn.textContent = "⬇️ Download Output (.docx)";
-    downloadBtn.className = "copy-btn";
+  const downloadBtn = document.createElement("button");
+  downloadBtn.className = "copy-btn";
+  downloadBtn.textContent = "⬇️ Download Output (.docx)";
+  downloadBtn.onclick = () => downloadDocx(p.output);
+  controls.appendChild(downloadBtn);
 
-    downloadBtn.onclick = async () => {
-      try {
-        const cache = await caches.open("cellular-network-v1");
-        const cached = await cache.match(practical.output);
-
-        let blob;
-        if (cached) blob = await cached.blob();
-        else {
-          const net = await fetch(practical.output);
-          blob = await net.blob();
-          cache.put(practical.output, net.clone());
-        }
-
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = practical.output.split("/").pop();
-        a.click();
-        URL.revokeObjectURL(url);
-
-      } catch (err) {
-        alert("⚠ File not cached yet. Please open online once.");
-      }
-    };
-
-    controls.appendChild(downloadBtn);
-  }
-
-  const btnMinus = document.createElement("button");
-  btnMinus.className = "font-btn";
-  btnMinus.textContent = "−";
-  btnMinus.onclick = () => {
-    if (currentFontSize > 0.6) {
-      currentFontSize -= 0.1;
-      popupCode.style.fontSize = `${currentFontSize}rem`;
-    }
+  const minus = document.createElement("button");
+  minus.className = "font-btn";
+  minus.textContent = "−";
+  minus.onclick = () => {
+    currentFontSize -= 0.1;
+    popupCode.style.fontSize = currentFontSize + "rem";
   };
 
-  const btnPlus = document.createElement("button");
-  btnPlus.className = "font-btn";
-  btnPlus.textContent = "+";
-  btnPlus.onclick = () => {
+  const plus = document.createElement("button");
+  plus.className = "font-btn";
+  plus.textContent = "+";
+  plus.onclick = () => {
     currentFontSize += 0.1;
-    popupCode.style.fontSize = `${currentFontSize}rem`;
+    popupCode.style.fontSize = currentFontSize + "rem";
   };
 
   const copyBtn = document.createElement("button");
@@ -236,41 +193,104 @@ function renderControls(practical) {
   copyBtn.onclick = () => {
     navigator.clipboard.writeText(currentCode);
     copyBtn.textContent = "✓ Copied!";
-    setTimeout(() => (copyBtn.textContent = "📋 Copy Code"), 1500);
+    setTimeout(() => (copyBtn.textContent = "📋 Copy Code"), 1200);
   };
 
-  controls.appendChild(btnMinus);
-  controls.appendChild(btnPlus);
-  controls.appendChild(copyBtn);
+  controls.append(minus, plus, copyBtn);
 }
 
 closeBtn.onclick = () => (popup.style.display = "none");
 
-/* -------------------------------------------------------------
-   BUILD VERSION (FOOTER)
--------------------------------------------------------------- */
-document.getElementById("buildVersion").textContent =
-  new Date().toLocaleString("en-IN", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
 
 /* -------------------------------------------------------------
-   CACHE PROGRESS LISTENER
+   OUTPUT DOCX OFFLINE DOWNLOAD
+-------------------------------------------------------------- */
+async function downloadDocx(path) {
+  try {
+    const cache = await caches.open("cn-vault-v5");
+    const cached = await cache.match(path);
+
+    let blob;
+
+    if (cached) {
+      blob = await cached.blob();
+    } else {
+      const res = await fetch(path);
+      blob = await res.blob();
+      cache.put(path, res.clone());
+    }
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = path.split("/").pop();
+    link.click();
+
+  } catch (err) {
+    showToast("⚠️ File not available offline. Connect once.");
+  }
+}
+
+
+/* -------------------------------------------------------------
+   CACHING PROGRESS BAR + TOASTS
 -------------------------------------------------------------- */
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.addEventListener("message", (event) => {
-    if (event.data?.type === "CACHE_PROGRESS") {
-      cacheProgress.style.display = "block";
-      cacheProgress.textContent =
-        `Downloading for offline use: ${event.data.progress}%`;
+
+    // Progress %
+    if (event.data.type === "CACHE_PROGRESS") {
+      cacheBarContainer.style.display = "block";
+      cacheBarText.style.display = "block";
+
+      cacheBar.style.width = event.data.progress + "%";
+      cacheBarText.textContent = `Caching files… ${event.data.progress}%`;
 
       if (event.data.progress >= 100) {
-        setTimeout(() => {
-          cacheProgress.textContent = "✔ Ready Offline!";
-        }, 800);
+        cacheBarText.textContent = "✔ All files cached!";
+        setTimeout(() => (cacheBarContainer.style.display = "none"), 2500);
       }
+    }
+
+    // DOCX Cached Toast
+    if (event.data.type === "DOCX_CACHED") {
+      showToast(`📄 ${event.data.file} cached for offline use`);
     }
   });
 }
+
+
+/* -------------------------------------------------------------
+   TOAST NOTIFICATION
+-------------------------------------------------------------- */
+function showToast(msg) {
+  const t = document.createElement("div");
+  t.textContent = msg;
+  t.style.cssText = `
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg,#00ff9d,#0099ff);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    z-index: 9999;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  `;
+  document.body.appendChild(t);
+
+  setTimeout(() => (t.style.opacity = "1"), 50);
+  setTimeout(() => (t.style.opacity = "0"), 2500);
+  setTimeout(() => t.remove(), 3000);
+}
+
+
+/* -------------------------------------------------------------
+   FOOTER VERSION
+-------------------------------------------------------------- */
+document.getElementById("buildVersion").textContent =
+  new Date().toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
