@@ -617,3 +617,68 @@ footer {
   from { transform: translate(-50%, 20px); opacity: 0; }
   to { transform: translate(-50%, 0px); opacity: 1; }
 }
+
+
+/* Offline banner */
+.offline-banner {
+  width: 100%;
+  background: rgba(255, 60, 60, 0.95);
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  letter-spacing: 0.5px;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.25);
+}
+
+/* Offline ready badge */
+.offline-ready-badge {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  background: linear-gradient(135deg,#00ff95,#00c853);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  display: none;
+  z-index: 99999;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* Cache bar container */
+.cache-bar-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  display: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px);
+}
+
+/* Actual bar */
+.cache-bar {
+  height: 10px;
+  width: 0%;
+  background: linear-gradient(135deg,#00ff9d,#0099ff);
+  transition: width 0.25s ease;
+}
+
+/* bar text */
+.cache-bar-text {
+  text-align: center;
+  font-size: 0.88rem;
+  margin: 8px 0;
+  color: #00ffb5;
+  font-weight: 600;
+  display: none;
+}

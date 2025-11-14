@@ -67,6 +67,23 @@
     </div>
     <p>Your complete offline-ready CN Lab Vault.</p>
   </header>
+  
+  <!-- Offline Banner (hidden by default) -->
+<div id="offlineBanner" class="offline-banner" aria-hidden="true">
+  ⚠️ You are offline — some files may not load
+</div>
+
+<!-- Offline Ready Badge -->
+<div id="offlineReadyBadge" class="offline-ready-badge" aria-hidden="true">
+  ✔ Offline Ready
+</div>
+
+<!-- Caching progress bar (hidden by default) -->
+<div id="cacheBarContainer" class="cache-bar-container" aria-hidden="true">
+  <div id="cacheBar" class="cache-bar"></div>
+  <p id="cacheBarText" class="cache-bar-text">Preparing files for offline use…</p>
+</div>
+
 
   <!-- 🔄 Offline Caching Progress Bar -->
   <div id="cacheBarContainer" style="
@@ -133,7 +150,7 @@
       <a href="https://www.techhbuddies.com" target="_blank" class="footer-link">
         TechhBuddies
       </a>
-      | Microcontroller Code Vault © 2025
+      | Cellular Network Code Vault © 2025
       <br />
       <small>Last updated: <span id="buildVersion"></span></small>
     </p>

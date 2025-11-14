@@ -7,7 +7,9 @@
    ✔ DOCX Offline Download
 -------------------------------------------------------------- */
 
+/* script.js */
 const CACHE_NAME = "cn-vault-v10";
+
 
 /* -------------------------------------------------------------
    PRACTICALS (FULL & CORRECTED)
