@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Cellular Network Code Vault</title>
 
   <link rel="icon" type="image/png" href="/assets/favicon.png" />
-  <link rel="stylesheet" href="/style-v2.css" />
+  <!-- New Premium Styles -->
+  <link rel="stylesheet" href="/style-v3.css" />
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#00c4ff" />
+  <meta name="theme-color" content="#050510" />
 
   <script>
     if ("serviceWorker" in navigator) {
@@ -21,112 +23,65 @@
 
   <!-- 🌟 Splash Screen -->
   <div id="splash-screen">
-    <div class="splash-content">
-      <img src="/assets/HD Logo PNG.png" class="splash-logo" />
-      <h1 class="splash-title">Techh Buddies</h1>
-      <p class="splash-caption">Cellular Network Code Vault • Sem 6 ENTC</p>
-    </div>
+    <img src="/assets/HD Logo PNG.png" alt="Techh Buddies Logo" class="splash-logo" />
+    <div class="splash-loader"></div>
+    <h1 style="font-family: 'Space Grotesk'; font-size: 2rem; color: white;">Techh Buddies</h1>
+    <p style="color: rgba(255,255,255,0.5); letter-spacing: 2px; font-size: 0.8rem;">CODE VAULT</p>
   </div>
 
   <!-- ⚠️ Offline Mode Banner -->
-  <div id="offlineBanner" style="
-    width:100%; 
-    background:#ff4444; 
-    color:white; 
-    padding:10px; 
-    text-align:center; 
-    font-weight:600;
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    z-index:9999;">
-    ⚠️ You are offline — some files may not load
-  </div>
-
-  <!-- ✔ Offline Ready Badge -->
-  <div id="offlineReadyBadge" style="
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:#00c853;
-    color:white;
-    padding:10px 18px;
-    border-radius:10px;
-    font-weight:600;
-    display:none;
-    box-shadow:0 4px 12px rgba(0,0,0,0.3);
-    z-index:9999;">
-    ✔ Offline Ready
+  <div id="offlineBanner" class="offline-banner">
+    ⚠️ You are currently offline
   </div>
 
   <header>
-    <div class="logo-title">
-      <img src="/assets/cn_logo.png" class="logo" />
-      <h1>Cellular Network Code Vault</h1>
+    <div class="logo-section">
+      <img src="/assets/cn_logo.png" class="logo" alt="Vault Logo" />
+      <div class="title-group">
+        <h1>CN Vault</h1>
+        <p>Cellular Network Lab</p>
+      </div>
     </div>
-    <p>Your complete offline-ready CN Lab Vault.</p>
+
+    <!-- 🔍 Search Bar -->
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search practicals..." />
+    </div>
   </header>
-  
-  <!-- Offline Banner (hidden by default) -->
-<div id="offlineBanner" class="offline-banner" aria-hidden="true">
-  ⚠️ You are offline — some files may not load
-</div>
 
-<!-- Offline Ready Badge -->
-<div id="offlineReadyBadge" class="offline-ready-badge" aria-hidden="true">
-  ✔ Offline Ready
-</div>
-
-<!-- Caching progress bar (hidden by default) -->
-<div id="cacheBarContainer" class="cache-bar-container" aria-hidden="true">
-  <div id="cacheBar" class="cache-bar"></div>
-  <p id="cacheBarText" class="cache-bar-text">Preparing files for offline use…</p>
-</div>
-
-
-  <!-- 🔄 Offline Caching Progress Bar -->
-  <div id="cacheBarContainer" style="
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto 20px auto;
-      background: rgba(255,255,255,0.15);
-      border-radius: 8px;
-      overflow: hidden;
-      display: none;">
-    
-    <div id="cacheBar" style="
-        height: 10px;
-        width: 0%;
-        background: linear-gradient(135deg,#00ff9d,#0099ff);
-        transition: width 0.25s;">
+  <main class="grid-container">
+    <!-- 🔄 Caching Progress (Hidden by default) -->
+    <div id="cacheBarContainer"
+      style="display:none; margin-bottom: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; height: 6px;">
+      <div id="cacheBar" style="width: 0%; height: 100%; background: var(--accent-gradient); transition: width 0.3s;">
+      </div>
     </div>
 
-    <p id="cacheBarText" style="
-        text-align:center;
-        font-size:0.85rem;
-        margin-top:6px;
-        color:#00ff9d;
-        font-weight:500;
-        display:none;">
-        Preparing files for offline use…
-    </p>
-  </div>
-
-  <main class="grid" id="practicalList"></main>
+    <div class="grid" id="practicalList">
+      <!-- Cards will be injected here via JS -->
+    </div>
+  </main>
 
   <!-- 🔍 Popup Viewer -->
   <div id="popup" class="popup">
     <div class="popup-card">
       <div class="popup-header">
-        <h2 id="popupTitle"></h2>
-        <button id="closeBtn" class="close-btn">✖</button>
+        <h2 id="popupTitle"> Practical Title </h2>
+        <button id="closeBtn" class="close-btn">✕</button>
       </div>
 
-      <div id="fileTabs" class="file-tabs"></div>
-      <pre id="popupCode"></pre>
+      <div class="popup-body">
+        <div id="fileTabs" class="file-tabs"></div>
+        <div id="popupCode"></div>
 
-      <div class="popup-controls"></div>
+        <div class="popup-controls">
+          <button class="btn btn-secondary" id="fontMinus">A-</button>
+          <button class="btn btn-secondary" id="fontPlus">A+</button>
+          <button class="btn" id="copyBtn">📋 Copy</button>
+          <button class="btn" id="downloadBtn">⬇ Output Docx</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -138,12 +93,13 @@
     </div>
     <p>
       This website is created solely for <strong>educational purposes</strong>.
-      It is intended to help students understand and practice Microcontroller programming and interfacing.
-      Please do not use this platform or its content for any form of
-      <strong>cheating, malpractice, or academic dishonesty</strong>.
+      It is intended to help students understand and practice <strong>Cellular Network concepts</strong>.
+      Please do not use this platform, its content, or provided code for any form of
+      <strong>cheating, malpractice, or academic dishonesty</strong> during examinations or assessments.
     </p>
   </section>
 
+  <!-- ⚡ Footer -->
   <footer>
     <p>
       Made with ❤️ by
@@ -152,18 +108,34 @@
       </a>
       | Cellular Network Code Vault © 2025
       <br />
-      <small>Last updated: <span id="buildVersion"></span></small>
+      <small>Last updated: <span id="buildVersion">v2.0</span></small>
     </p>
   </footer>
 
   <script src="/script.js"></script>
 
   <script>
+    // Simple Splash Logic
     window.addEventListener("load", () => {
-      setTimeout(() => document.getElementById("splash-screen").classList.add("hide"), 4200);
-      setTimeout(() => document.getElementById("splash-screen").remove(), 2000);
+      setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+        splash.style.opacity = "0";
+        setTimeout(() => splash.remove(), 800);
+      }, 2500);
+    });
+
+    // Mouse Move Effect for Cards
+    document.addEventListener('mousemove', e => {
+      document.querySelectorAll('.card').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
     });
   </script>
 
 </body>
+
 </html>

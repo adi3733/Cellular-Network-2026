@@ -1,22 +1,21 @@
 /* -------------------------------------------------------------
-   Cellular Network Code Vault — FINAL SERVICE WORKER (v10)
+   Cellular Network Code Vault — FINAL SERVICE WORKER (v21)
    ✔ Correct URL-encoded folder paths
    ✔ Offline caching
    ✔ Progress bar events
    ✔ DOCX cached notifications
 -------------------------------------------------------------- */
 
-const CACHE_NAME = "cn-vault-v10";
-
+const CACHE_NAME = "cn-vault-v21";
 
 const CACHE_ASSETS = [
 
-  "/", "/index.html", "/style-v2.css", "/script.js", "/manifest.json",
+  "/", "/index.html", "/style-v3.css", "/script.js", "/manifest.json",
 
   // Icons
   "/assets/favicon.png",
   "/assets/micro_logo.png",
-  "/assets/HD%20Logo%20PNG.png",
+  "/assets/HD Logo PNG.png",
   "/assets/Caution.png",
 
   /* -------------------------------------------------------------
