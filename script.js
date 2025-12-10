@@ -331,27 +331,64 @@ async function downloadDocx(path) {
     URL.revokeObjectURL(url);
     showToast("⬇ Download started");
 
+
   } catch (err) {
     showToast("⚠ Error downloading file.");
   }
 }
 
-// Service Worker Messages
+// Service Worker & Caching Logic
 if ("serviceWorker" in navigator) {
+  const updateCacheUI = (progress) => {
+    cacheBarContainer.style.display = "block";
+    cacheBar.style.width = `${progress}% `;
+    const percentEl = document.getElementById("cachePercent");
+    if (percentEl) percentEl.textContent = `${progress}% `;
+
+    if (progress >= 100) {
+      setTimeout(() => {
+        cacheBarContainer.style.opacity = "0"; // Fade out
+        setTimeout(() => {
+          cacheBarContainer.style.display = "none";
+          cacheBarContainer.style.opacity = "1"; // Reset for next time
+        }, 500);
+      }, 1500);
+      showToast("✔ Offline Ready!");
+    }
+  };
+
+  navigator.serviceWorker.register("/service-worker.js").then((reg) => {
+    // 1. Check if we already have a controller (App was loaded before)
+    if (navigator.serviceWorker.controller) {
+      // If no new worker is installing, we are already cached.
+      if (!reg.installing && !reg.waiting) {
+        // Show 100% immediately for reassurance, then hide
+        console.log("Service Worker already active.");
+        updateCacheUI(100);
+      }
+    } else {
+      // First load, no controller yet.
+      console.log("First visit, installing Service Worker...");
+    }
+
+    // 2. Listen for new workers installing (e.g. updates)
+    reg.addEventListener("updatefound", () => {
+      const newWorker = reg.installing;
+      console.log("New worker installing...");
+
+      newWorker.addEventListener("statechange", () => {
+        if (newWorker.state === "installed") {
+          // Wait for it to activate
+        }
+      });
+    });
+  });
+
   navigator.serviceWorker.addEventListener("message", (event) => {
     if (!event.data) return;
 
     if (event.data.type === "CACHE_PROGRESS") {
-      cacheBarContainer.style.display = "block";
-      cacheBar.style.width = event.data.progress + "%";
-
-      const percentEl = document.getElementById("cachePercent");
-      if (percentEl) percentEl.textContent = event.data.progress + "%";
-
-      if (event.data.progress >= 100) {
-        setTimeout(() => (cacheBarContainer.style.display = "none"), 2000);
-        showToast("✔ Offline Ready!");
-      }
+      updateCacheUI(event.data.progress);
     }
   });
 }
