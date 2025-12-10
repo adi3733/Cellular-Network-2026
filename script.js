@@ -232,14 +232,26 @@ function setActiveFile(practical, index) {
     // 1. Comments (take precedence over keywords inside them)
     // We will process line by line to handle comments correctly
     return html.split('\n').map(line => {
-      // If line is a comment
-      const commentMatch = line.match(/(%.*)$/);
+      // Find the first % that refers to a comment (not inside a string)
+      let commentIndex = -1;
+      let inString = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === "'" && (i === 0 || line[i - 1] !== '\\')) { // Simple quote toggle check
+          inString = !inString;
+        }
+        if (!inString && char === '%') {
+          commentIndex = i;
+          break;
+        }
+      }
+
       let commentPart = "";
       let codePart = line;
 
-      if (commentMatch) {
-        commentPart = `<span class="code-comment">${commentMatch[1]}</span>`;
-        codePart = line.substring(0, commentMatch.index);
+      if (commentIndex !== -1) {
+        commentPart = `<span class="code-comment">${line.substring(commentIndex)}</span>`;
+        codePart = line.substring(0, commentIndex);
       }
 
       // Highlight code part

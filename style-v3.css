@@ -246,10 +246,11 @@ header {
 
 .card:hover .card-icon {
     opacity: 1;
-    transform: scale(1.2) rotate(10deg);
     background: var(--accent-gradient);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: classyFloat 3s ease-in-out infinite;
 }
 
 /* 🔍 Popup Modal */
@@ -356,7 +357,7 @@ header {
 
 /* Syntax Highlighting Colors (Matlab Dark) */
 .code-comment {
-    color: #6a9955;
+    color: #2bac1c;
     font-style: italic;
 }
 
@@ -613,6 +614,23 @@ header {
 
     100% {
         width: 100%;
+    }
+}
+
+@keyframes classyFloat {
+    0% {
+        transform: scale(1.2) rotate(10deg) translateY(0);
+        filter: drop-shadow(0 0 5px var(--primary-glow));
+    }
+
+    50% {
+        transform: scale(1.4) rotate(0deg) translateY(-8px);
+        filter: drop-shadow(0 0 15px var(--secondary-glow));
+    }
+
+    100% {
+        transform: scale(1.2) rotate(10deg) translateY(0);
+        filter: drop-shadow(0 0 5px var(--primary-glow));
     }
 }
 
