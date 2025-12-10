@@ -617,6 +617,77 @@ header {
     }
 }
 
+/* 💀 Skeleton Loader */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 25%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    color: transparent !important;
+    min-height: 20px;
+    margin-bottom: 8px;
+}
+
+/* 🌈 PrismJS Integration */
+code[class*="language-"],
+pre[class*="language-"] {
+    text-shadow: none !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.95rem !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Token Colors Limiters (Optional overrides if Tomorrow is too dull) */
+.token.comment {
+    color: #2bac1c !important;
+    font-style: italic;
+}
+
+/* Bright Green */
+.token.keyword {
+    color: #569cd6 !important;
+    font-weight: bold;
+}
+
+/* Blue */
+.token.string {
+    color: #ce9178 !important;
+}
+
+/* Salmon/Orange String */
+.token.number {
+    color: #b5cea8 !important;
+}
+
+/* Light Green Number */
+.token.operator {
+    color: #d4d4d4 !important;
+}
+
+/* Standard Text Operator */
+.token.function {
+    color: #dcdcaa !important;
+}
+
+/* Yellowish Function */
+
+/* Preserve green comments */
+
 @keyframes classyFloat {
     0% {
         transform: scale(1.2) rotate(10deg) translateY(0);

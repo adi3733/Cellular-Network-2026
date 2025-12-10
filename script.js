@@ -7,6 +7,15 @@
 
 const CACHE_NAME = "cn-vault-v11";
 
+// 🚀 Initialize Animations
+if (typeof AOS !== 'undefined') {
+  AOS.init({
+    duration: 800,
+    once: true,
+    offset: 50
+  });
+}
+
 /* -------------------------------------------------------------
    PRACTICALS DATA
 -------------------------------------------------------------- */
@@ -141,9 +150,13 @@ function renderCards(filterText = "") {
     return;
   }
 
-  filtered.forEach((p) => {
+  filtered.forEach((p, index) => {
     const card = document.createElement("div");
     card.className = "card";
+    // 🎭 Staggered Entrance
+    card.setAttribute("data-aos", "fade-up");
+    card.setAttribute("data-aos-delay", (index * 100).toString());
+
     card.innerHTML = `
       <div class="card-icon">⚡</div>
       <h3>${p.name.replace(/Expt No\.(\d+)/, '<span style="color:var(--primary)">#$1</span>')}</h3>
@@ -202,73 +215,14 @@ function setActiveFile(practical, index) {
     tab.classList.toggle("active", i === index)
   );
 
-  popupCode.innerHTML = '<span style="color:grey">Loading...</span>';
-
-  /* Syntax Highlighting Logic */
-  const highlightMatlab = (code) => {
-    // Escape HTML to prevent injection
-    let html = code
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-
-    // Patterns (Order matters!)
-    const patterns = [
-      // Comments (% ...)
-      { regex: /(%.*?)$/gm, class: "code-comment" },
-      // Strings ('...')
-      { regex: /(')(?:''|[^'\n])*(')/g, class: "code-string" },
-      // Numbers
-      { regex: /\b\d+(\.\d+)?\b/g, class: "code-number" },
-      // Keywords
-      { regex: /\b(break|case|catch|classdef|continue|else|elseif|end|for|function|global|if|methods|otherwise|parfor|persistent|properties|return|spmd|switch|try|while|clc|clear|subplot|plot|title|xlabel|ylabel|grid|legend|hold)\b/g, class: "code-keyword" }
-    ];
-
-    // We need a way to apply regex without corrupting already replaced HTML tags.
-    // A simple approach for this complexity: split by line and process, or use a tokenizer.
-    // Given the constraints, we'll try a sequential replacement but be careful with overlap.
-    // To avoid replacing inside tags, we can use a placeholder approach, but for this simple set:
-
-    // 1. Comments (take precedence over keywords inside them)
-    // We will process line by line to handle comments correctly
-    return html.split('\n').map(line => {
-      // Find the first % that refers to a comment (not inside a string)
-      let commentIndex = -1;
-      let inString = false;
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === "'" && (i === 0 || line[i - 1] !== '\\')) { // Simple quote toggle check
-          inString = !inString;
-        }
-        if (!inString && char === '%') {
-          commentIndex = i;
-          break;
-        }
-      }
-
-      let commentPart = "";
-      let codePart = line;
-
-      if (commentIndex !== -1) {
-        commentPart = `<span class="code-comment">${line.substring(commentIndex)}</span>`;
-        codePart = line.substring(0, commentIndex);
-      }
-
-      // Highlight code part
-      if (codePart.trim().length > 0) {
-        // Strings
-        codePart = codePart.replace(/(')(?:''|[^'\n])*(')/g, '<span class="code-string">$&</span>');
-
-        // Keywords (boundary check)
-        codePart = codePart.replace(/\b(break|case|catch|classdef|continue|else|elseif|end|for|function|global|if|methods|otherwise|parfor|persistent|properties|return|spmd|switch|try|while|clc|clear|subplot|plot|title|xlabel|ylabel|grid|legend|hold)\b/g, '<span class="code-keyword">$1</span>');
-
-        // Numbers (simple)
-        codePart = codePart.replace(/\b\d+(\.\d+)?\b/g, '<span class="code-number">$&</span>');
-      }
-
-      return codePart + commentPart;
-    }).join('\n');
-  };
+  // 💀 Skeleton Loader
+  popupCode.innerHTML = `
+    <div class="skeleton" style="width: 60%"></div>
+    <div class="skeleton" style="width: 80%"></div>
+    <div class="skeleton" style="width: 70%"></div>
+    <div class="skeleton" style="width: 50%"></div>
+    <div class="skeleton" style="width: 90%"></div>
+  `;
 
   const file = practical.files[index];
 
@@ -279,7 +233,16 @@ function setActiveFile(practical, index) {
     })
     .then((code) => {
       currentCode = code;
-      popupCode.innerHTML = highlightMatlab(code); // Use innerHTML
+      // 🌈 Prism JS Highlighting
+      // We set plain text, then apply class, then highlight
+      popupCode.innerHTML = `<pre><code class="language-matlab"></code></pre>`;
+      const codeElement = popupCode.querySelector("code");
+      codeElement.textContent = code; // Safely sets text
+
+      if (typeof Prism !== 'undefined') {
+        Prism.highlightElement(codeElement);
+      }
+
       popupCode.style.fontSize = currentFontSize + "rem";
     })
     .catch(() => {
@@ -303,6 +266,16 @@ fontPlus.onclick = () => {
 copyBtn.onclick = () => {
   if (!currentCode) return;
   navigator.clipboard.writeText(currentCode);
+
+  // 🎉 Confetti!
+  if (typeof confetti !== 'undefined') {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
+
   const originalText = copyBtn.textContent;
   copyBtn.textContent = "✓ Copied!";
   copyBtn.style.borderColor = "var(--primary)";
