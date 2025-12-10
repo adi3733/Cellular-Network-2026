@@ -750,7 +750,7 @@ code[class*="language-"],
 pre[class*="language-"] {
     text-shadow: none !important;
     font-family: 'Fira Code', monospace !important;
-    font-size: 0.95rem !important;
+    font-size: inherit !important;
     background: transparent !important;
     margin: 0 !important;
     padding: 0 !important;
