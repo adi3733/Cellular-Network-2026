@@ -345,6 +345,9 @@ if ("serviceWorker" in navigator) {
       cacheBarContainer.style.display = "block";
       cacheBar.style.width = event.data.progress + "%";
 
+      const percentEl = document.getElementById("cachePercent");
+      if (percentEl) percentEl.textContent = event.data.progress + "%";
+
       if (event.data.progress >= 100) {
         setTimeout(() => (cacheBarContainer.style.display = "none"), 2000);
         showToast("✔ Offline Ready!");
