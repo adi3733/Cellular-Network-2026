@@ -153,7 +153,79 @@ header {
     color: rgba(255, 255, 255, 0.3);
 }
 
-/* 📱 Responsive Header for Mobile */
+/* � Manual Download Button */
+.manual-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: var(--font-main);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    animation: float 3s ease-in-out infinite;
+    cursor: pointer;
+}
+
+.manual-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.manual-btn:hover::before {
+    left: 100%;
+}
+
+.manual-btn:hover {
+    background: var(--accent-gradient);
+    border-color: var(--primary);
+    box-shadow: 0 0 30px var(--primary-glow), 0 0 50px var(--secondary-glow);
+    transform: translateY(-3px) scale(1.05);
+    color: #000;
+}
+
+.manual-icon {
+    font-size: 1.3rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.manual-text {
+    font-family: var(--font-display);
+    letter-spacing: 0.5px;
+}
+
+/* 🎭 Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* �📱 Responsive Header for Mobile */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -163,8 +235,111 @@ header {
         width: 95%;
     }
 
+    .manual-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
     .search-container {
         width: 100%;
+    }
+
+    .manual-file-card {
+        padding: 15px;
+    }
+
+    .manual-file-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .manual-file-info h4 {
+        font-size: 0.9rem;
+    }
+
+    .manual-popup-card {
+        max-width: 95%;
+    }
+}
+
+/* ⚡ Notification Ribbon */
+.notification-ribbon {
+    position: sticky;
+    top: calc(var(--header-height) + 20px);
+    z-index: 99;
+    margin: 0 auto 20px;
+    width: 90%;
+    max-width: 1200px;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15));
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.1);
+    animation: slideDown 0.6s ease-out;
+    overflow: hidden;
+    position: relative;
+}
+
+.notification-ribbon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: slide 3s infinite;
+}
+
+.ribbon-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.ribbon-icon {
+    font-size: 1.2rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.ribbon-text {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffc107;
+    text-align: center;
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@media (max-width: 768px) {
+    .notification-ribbon {
+        width: 95%;
+        padding: 10px 15px;
+        top: calc(var(--header-height) + 200px);
+    }
+
+    .ribbon-text {
+        font-size: 0.85rem;
+    }
+
+    .ribbon-icon {
+        font-size: 1rem;
     }
 }
 
@@ -445,6 +620,134 @@ header {
     background: var(--secondary);
     color: white;
     box-shadow: 0 0 20px var(--secondary-glow);
+}
+
+/* 📚 Manual Download Popup */
+.manual-popup-card {
+    max-width: 700px;
+}
+
+.manual-description {
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.manual-grid {
+    display: grid;
+    gap: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.manual-file-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    color: var(--text-main);
+    position: relative;
+    overflow: hidden;
+}
+
+.manual-file-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.manual-file-card:hover::before {
+    left: 100%;
+}
+
+.manual-file-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(0, 242, 255, 0.2);
+}
+
+.manual-file-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    transition: all 0.3s;
+}
+
+.manual-file-card:hover .manual-file-icon {
+    background: var(--accent-gradient);
+    transform: rotate(10deg) scale(1.1);
+}
+
+.manual-file-info {
+    flex: 1;
+}
+
+.manual-file-info h4 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: var(--text-main);
+}
+
+.manual-file-type {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(188, 19, 254, 0.2);
+    border: 1px solid var(--secondary);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--secondary);
+    letter-spacing: 0.5px;
+}
+
+.manual-download-icon {
+    font-size: 1.3rem;
+    opacity: 0.5;
+    transition: all 0.3s;
+}
+
+.manual-file-card:hover .manual-download-icon {
+    opacity: 1;
+    transform: translateY(2px);
+    color: var(--primary);
+}
+
+/* Scrollbar for manual grid */
+.manual-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.manual-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.manual-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.manual-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 

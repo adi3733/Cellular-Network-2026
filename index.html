@@ -55,12 +55,27 @@
       </div>
     </div>
 
-    <!-- 🔍 Search Bar -->
+    <!-- � Experiment Manual Button -->
+    <button id="manualBtn" class="manual-btn">
+      <span class="manual-icon">📚</span>
+      <span class="manual-text">Experiment Manual</span>
+    </button>
+
+    <!-- �🔍 Search Bar -->
     <div class="search-container">
       <span class="search-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="Search practicals..." />
     </div>
   </header>
+
+  <!-- ⚡ Notification Ribbon
+  <div class="notification-ribbon">
+    <div class="ribbon-content">
+      <span class="ribbon-icon">⚠️</span>
+      <span class="ribbon-text">These Codes Are Designed For Matlab - Convert it For Octave</span>
+      <span class="ribbon-icon">⚠️</span>
+    </div>
+  </div> -->
 
   <main class="grid-container">
     <!-- 🔄 Caching Progress (Visible) -->
@@ -76,7 +91,23 @@
     </div>
   </main>
 
-  <!-- 🔍 Popup Viewer -->
+  <!-- � Manual Download Popup -->
+  <div id="manualPopup" class="popup">
+    <div class="popup-card manual-popup-card">
+      <div class="popup-header">
+        <h2>📚 Experiment Manuals</h2>
+        <button id="closeManualBtn" class="close-btn">✕</button>
+      </div>
+      <div class="popup-body">
+        <p class="manual-description">Download experiment manuals and lab documentation</p>
+        <div class="manual-grid" id="manualList">
+          <!-- Files will be injected here via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- �🔍 Popup Viewer -->
   <div id="popup" class="popup">
     <div class="popup-card">
       <div class="popup-header">
@@ -146,6 +177,62 @@
         card.style.setProperty('--mouse-x', `${x}px`);
         card.style.setProperty('--mouse-y', `${y}px`);
       });
+    });
+
+    // 📚 Manual Popup Logic
+    const manualFiles = [
+      { name: 'CelNet Lab 1', path: '/assets/CN_Practicals/CelNet Lab 1.docx', type: 'docx' },
+      { name: 'CelNet Lab 2', path: '/assets/CN_Practicals/CelNet Lab 2.docx', type: 'docx' },
+      { name: 'CelNet Lab 3', path: '/assets/CN_Practicals/CelNet Lab 3.docx', type: 'docx' },
+      { name: 'CelNet Lab 4', path: '/assets/CN_Practicals/CelNet Lab 4.docx', type: 'docx' },
+      { name: 'CelNet Lab 5', path: '/assets/CN_Practicals/CelNet Lab 5.docx', type: 'docx' },
+      { name: 'CelNet Lab 6', path: '/assets/CN_Practicals/CelNet Lab 6.docx', type: 'docx' },
+      { name: 'CelNet Lab 7', path: '/assets/CN_Practicals/CelNet Lab 7.docx', type: 'docx' },
+      { name: 'CelNet Lab 8', path: '/assets/CN_Practicals/CelNet Lab 8.docx', type: 'docx' },
+      { name: 'CelNet Lab 9', path: '/assets/CN_Practicals/CelNet Lab 9.docx', type: 'docx' },
+      { name: 'CN Index 2019 Pattern', path: '/assets/CN_Practicals/CN Index 2019 Pattern.pdf', type: 'pdf' }
+    ];
+
+    const manualPopup = document.getElementById('manualPopup');
+    const manualBtn = document.getElementById('manualBtn');
+    const closeManualBtn = document.getElementById('closeManualBtn');
+    const manualList = document.getElementById('manualList');
+
+    // Populate manual list
+    manualFiles.forEach(file => {
+      const fileCard = document.createElement('a');
+      fileCard.href = file.path;
+      fileCard.download = file.name + '.' + file.type;
+      fileCard.className = 'manual-file-card';
+      fileCard.innerHTML = `
+        <div class="manual-file-icon">${file.type === 'pdf' ? '📄' : '📝'}</div>
+        <div class="manual-file-info">
+          <h4>${file.name}</h4>
+          <span class="manual-file-type">${file.type.toUpperCase()}</span>
+        </div>
+        <div class="manual-download-icon">⬇</div>
+      `;
+      manualList.appendChild(fileCard);
+    });
+
+    // Open popup
+    manualBtn.addEventListener('click', () => {
+      manualPopup.style.display = 'flex';
+      setTimeout(() => manualPopup.classList.add('active'), 10);
+    });
+
+    // Close popup
+    closeManualBtn.addEventListener('click', () => {
+      manualPopup.classList.remove('active');
+      setTimeout(() => manualPopup.style.display = 'none', 300);
+    });
+
+    // Close on backdrop click
+    manualPopup.addEventListener('click', (e) => {
+      if (e.target === manualPopup) {
+        manualPopup.classList.remove('active');
+        setTimeout(() => manualPopup.style.display = 'none', 300);
+      }
     });
   </script>
 
