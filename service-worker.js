@@ -6,7 +6,7 @@
    ✔ DOCX cached notifications
 -------------------------------------------------------------- */
 
-const CACHE_NAME = "cn-vault-v21";
+const CACHE_NAME = "cn-vault-v23";
 
 const CACHE_ASSETS = [
 
@@ -17,6 +17,17 @@ const CACHE_ASSETS = [
   "/assets/micro_logo.png",
   "/assets/HD Logo PNG.png",
   "/assets/Caution.png",
+
+    // CN Practicals docs
+    "/assets/CN_Practicals/CelNet%20Lab%201.docx",
+    "/assets/CN_Practicals/CelNet%20Lab%202.docx",
+    "/assets/CN_Practicals/CelNet%20Lab%203.docx",
+    "/assets/CN_Practicals/CelNet%20Lab%204.docx",
+    "/assets/CN_Practicals/CelNet%20Lab%205.docx",
+    "/assets/CN_Practicals/CelNet%20Lab%206.docx",
+    "/assets/CN_Practicals/CelNet%20Lab%207.docx",
+    "/assets/CN_Practicals/CelNet%20Lab%208.docx",
+    "/assets/CN_Practicals/CN%20Index%202019%20Pattern.pdf",
 
   /* -------------------------------------------------------------
      PRACTICAL FILES (URL-encoded paths)
@@ -38,10 +49,6 @@ const CACHE_ASSETS = [
   // Expt 6
   "/assets/Expt%20No.6%20-%20Link-Budget%20analysis/CN_6_Code.txt",
   "/assets/Expt%20No.6%20-%20Link-Budget%20analysis/CN_6.docx",
-
-  // Expt 7
-  "/assets/Expt%20No.7%20-%20BER%20MIMO/CN_7_Code.txt",
-  "/assets/Expt%20No.7%20-%20BER%20MIMO/CN_7.docx",
 
   // Expt 9
   "/assets/Expt%20No.9%20-%20MIMO%20Channel%20Coefficient/CN_9_Code.txt",

@@ -58,15 +58,6 @@ const practicals = [
     output: "/assets/Expt%20No.6%20-%20Link-Budget%20analysis/CN_6.docx"
   },
   {
-    id: 7,
-    name: "Expt No.7 - BER MIMO",
-    desc: "Bit error rate for MIMO systems",
-    files: [
-      { name: "CN_7_Code.txt", path: "/assets/Expt%20No.7%20-%20BER%20MIMO/CN_7_Code.txt" }
-    ],
-    output: "/assets/Expt%20No.7%20-%20BER%20MIMO/CN_7.docx"
-  },
-  {
     id: 9,
     name: "Expt No.9 - MIMO Channel Coefficient",
     desc: "Channel estimation for MIMO",
